@@ -63,3 +63,64 @@ matrix matrix::operator*(int a) const
     result *= a;
     return result;
 }
+
+matrix operator+(int a, const matrix& m)
+{
+    return m + a;
+}
+
+matrix operator*(int a, const matrix& m)
+{
+    return m * a;
+}
+
+matrix operator-(int a, const matrix& m)
+{
+    matrix result(m);
+
+    for (int i = 0; i < result.n * result.n; ++i) {
+        result.data[i] = a - result.data[i];
+    }
+
+    return result;
+}
+
+matrix& matrix::operator++(int)
+{
+    for (int i = 0; i < n * n; ++i) {
+        data[i] += 1;
+    }
+    return *this;
+}
+
+matrix& matrix::operator--(int)
+{
+    for (int i = 0; i < n * n; ++i) {
+        data[i] -= 1;
+    }
+    return *this;
+}
+
+matrix& matrix::operator+=(int a)
+{
+    for (int i = 0; i < n * n; ++i) {
+        data[i] += a;
+    }
+    return *this;
+}
+
+matrix& matrix::operator-=(int a)
+{
+    for (int i = 0; i < n * n; ++i) {
+        data[i] -= a;
+    }
+    return *this;
+}
+
+matrix& matrix::operator*=(int a)
+{
+    for (int i = 0; i < n * n; ++i) {
+        data[i] *= a;
+    }
+    return *this;
+}
