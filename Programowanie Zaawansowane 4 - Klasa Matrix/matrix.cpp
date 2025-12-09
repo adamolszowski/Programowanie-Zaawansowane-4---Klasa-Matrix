@@ -124,3 +124,58 @@ matrix& matrix::operator*=(int a)
     }
     return *this;
 }
+
+
+matrix& matrix::operator()(double value)
+{
+    int add = static_cast<int>(std::floor(value));
+
+    for (int i = 0; i < n * n; ++i) {
+        data[i] += add;
+    }
+    return *this;
+}
+
+std::ostream& operator<<(std::ostream& o, matrix& m)
+{
+    for (int i = 0; i < m.n; ++i) {
+        for (int j = 0; j < m.n; ++j) {
+            o << m.data[i * m.n + j] << " ";
+        }
+        o << '\n';
+    }
+    return o;
+}
+
+bool matrix::operator==(const matrix& m)
+{
+    if (n != m.n) return false;
+
+    for (int i = 0; i < n * n; ++i) {
+        if (data[i] != m.data[i])
+            return false;
+    }
+    return true;
+}
+
+bool matrix::operator>(const matrix& m)
+{
+    if (n != m.n) return false;
+
+    for (int i = 0; i < n * n; ++i) {
+        if (data[i] <= m.data[i])
+            return false;
+    }
+    return true;
+}
+
+bool matrix::operator<(const matrix& m)
+{
+    if (n != m.n) return false;
+
+    for (int i = 0; i < n * n; ++i) {
+        if (data[i] >= m.data[i])
+            return false;
+    }
+    return true;
+}
