@@ -95,3 +95,109 @@ matrix& matrix::losuj(int x) {
     }
     return *this;
 }
+
+
+matrix& matrix::diagonalna(int* t) {
+    for (int i = 0; i < n * n; i++)
+    {
+        data[i] = 0;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        data[i * n + i] = t[i];
+    }
+    return *this;
+}
+
+matrix& matrix::diagonalna_k(int k, int* t) {
+    for (int i = 0; i < n * n; i++)
+    {
+        data[i] = 0;
+    }
+
+    if (k >= 0) {
+        for (int i = 0; i < n - k; i++)
+        {
+            data[i * n + (i + k)] = t[i];
+        }
+    }
+    else {
+        for (int i = 0; i < n + k; i++)
+        {
+            data[(i - k) * n + i] = t[i];
+        }
+    }
+    return *this;
+}
+
+matrix& matrix::kolumna(int x, int* t) {
+    for (int i = 0; i < n; i++)
+    {
+        data[i * n + x] = t[i];
+    }
+    return *this;
+}
+
+matrix& matrix::wiersz(int x, int* t) {
+    for (int i = 0; i < n; i++)
+    {
+        data[x * n + i] = t[i];
+    }
+    return *this;
+}
+
+matrix& matrix::przekatna(void) {
+    for (int i = 0; i < n * n; i++)
+    {
+        data[i] = 0;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        data[i * n + i] = 1;
+    }
+    return *this;
+}
+
+matrix& matrix::pod_przekatna(void) {
+    for (int i = 0; i < n * n; i++)
+    {
+        data[i] = 0;
+    }
+    for (int i = 1; i < n; i++)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            data[i * n + j] = 1;
+        }
+    }
+    return *this;
+}
+
+matrix& matrix::nad_przekatna(void) {
+    for (int i = 0; i < n * n; i++)
+    {
+        data[i] = 0;
+    }
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            data[i * n + j] = 1;
+        }
+    }
+    return *this;
+}
+
+matrix& matrix::szachownica(void) {
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if ((i + j) % 2 == 0)
+                data[i * n + j] = 0;
+            else
+                data[i * n + j] = 1;
+        }
+    }
+    return *this;
+}
