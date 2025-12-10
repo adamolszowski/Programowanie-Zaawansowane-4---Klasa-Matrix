@@ -5,90 +5,6 @@
 
 using namespace std;
 
-matrix& matrix::operator+(matrix& m)
-{
-    if (n != m.n) {
-        std::cerr << "Blad: rozne rozmiary macierzy w operator+ (matrix, matrix)\n";
-        return *this;
-    }
-
-    for (int i = 0; i < n * n; ++i) {
-        data[i] += m.data[i];
-    }
-
-    return *this;
-}
-
-matrix& matrix::operator*(matrix& m)
-{
-    if (n != m.n) {
-        std::cerr << "Blad: rozne rozmiary macierzy w operator* (matrix, matrix)\n";
-        return *this;
-    }
-
-    std::unique_ptr<int[]> result = std::make_unique<int[]>(n * n);
-
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-            int sum = 0;
-            for (int k = 0; k < n; ++k) {
-                sum += data[i * n + k] * m.data[k * n + j];
-            }
-            result[i * n + j] = sum;
-        }
-    }
-
-    data.swap(result);
-
-    return *this;
-}
-
-matrix matrix::operator+(int a) const
-{
-    matrix result(*this);
-    result += a;
-    return result;
-}
-
-matrix matrix::operator-(int a) const
-{
-    matrix result(*this);
-    result -= a;
-    return result;
-}
-
-matrix matrix::operator*(int a) const
-{
-    matrix result(*this);
-    result *= a;
-    return result;
-}
-
-matrix operator+(int a, const matrix& m)
-{
-    return m + a;
-}
-
-matrix operator*(int a, const matrix& m)
-{
-    return m * a;
-}
-
-matrix operator-(int a, const matrix& m)
-{
-    matrix result(m);
-
-    for (int i = 0; i < result.n * result.n; ++i) {
-        result.data[i] = a - result.data[i];
-    }
-
-    return result;
-}
-
-matrix& matrix::operator++(int)
-{
-    for (int i = 0; i < n * n; ++i) {
-        data[i] += 1;
 matrix::matrix(void) : n(0), data(nullptr) {}
 
 matrix::matrix(int n) : n(n), data(make_unique<int[]>(n* n)) {
@@ -180,11 +96,6 @@ matrix& matrix::losuj(int x) {
     return *this;
 }
 
-matrix& matrix::operator--(int)
-{
-    for (int i = 0; i < n * n; ++i) {
-        data[i] -= 1;
-
 matrix& matrix::diagonalna(int* t) {
     for (int i = 0; i < n * n; i++)
     {
@@ -197,10 +108,6 @@ matrix& matrix::diagonalna(int* t) {
     return *this;
 }
 
-matrix& matrix::operator+=(int a)
-{
-    for (int i = 0; i < n * n; ++i) {
-        data[i] += a;
 matrix& matrix::diagonalna_k(int k, int* t) {
     for (int i = 0; i < n * n; i++)
     {
@@ -222,10 +129,6 @@ matrix& matrix::diagonalna_k(int k, int* t) {
     return *this;
 }
 
-matrix& matrix::operator-=(int a)
-{
-    for (int i = 0; i < n * n; ++i) {
-        data[i] -= a;
 matrix& matrix::kolumna(int x, int* t) {
     for (int i = 0; i < n; i++)
     {
@@ -234,10 +137,6 @@ matrix& matrix::kolumna(int x, int* t) {
     return *this;
 }
 
-matrix& matrix::operator*=(int a)
-{
-    for (int i = 0; i < n * n; ++i) {
-        data[i] *= a;
 matrix& matrix::wiersz(int x, int* t) {
     for (int i = 0; i < n; i++)
     {
@@ -246,13 +145,6 @@ matrix& matrix::wiersz(int x, int* t) {
     return *this;
 }
 
-
-matrix& matrix::operator()(double value)
-{
-    int add = static_cast<int>(std::floor(value));
-
-    for (int i = 0; i < n * n; ++i) {
-        data[i] += add;
 matrix& matrix::przekatna(void) {
     for (int i = 0; i < n * n; i++)
     {
@@ -261,6 +153,180 @@ matrix& matrix::przekatna(void) {
     for (int i = 0; i < n; i++)
     {
         data[i * n + i] = 1;
+    }
+    return *this;
+}
+
+matrix& matrix::pod_przekatna(void) {
+    for (int i = 0; i < n * n; i++)
+    {
+        data[i] = 0;
+    }
+    for (int i = 1; i < n; i++)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            data[i * n + j] = 1;
+        }
+    }
+    return *this;
+}
+
+matrix& matrix::nad_przekatna(void) {
+    for (int i = 0; i < n * n; i++)
+    {
+        data[i] = 0;
+    }
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            data[i * n + j] = 1;
+        }
+    }
+    return *this;
+}
+
+matrix& matrix::szachownica(void) {
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if ((i + j) % 2 == 0)
+                data[i * n + j] = 0;
+            else
+                data[i * n + j] = 1;
+        }
+    }
+    return *this;
+}
+
+matrix& matrix::operator+(matrix& m)
+{
+    if (n != m.n) {
+        std::cerr << "Blad: rozne rozmiary macierzy w operator+ (matrix, matrix)\n";
+        return *this;
+    }
+
+    for (int i = 0; i < n * n; ++i) {
+        data[i] += m.data[i];
+    }
+
+    return *this;
+}
+
+matrix& matrix::operator*(matrix& m)
+{
+    if (n != m.n) {
+        std::cerr << "Blad: rozne rozmiary macierzy w operator* (matrix, matrix)\n";
+        return *this;
+    }
+
+    std::unique_ptr<int[]> result = std::make_unique<int[]>(n * n);
+
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            int sum = 0;
+            for (int k = 0; k < n; ++k) {
+                sum += data[i * n + k] * m.data[k * n + j];
+            }
+            result[i * n + j] = sum;
+        }
+    }
+
+    data.swap(result);
+
+    return *this;
+}
+
+matrix matrix::operator+(int a) const
+{
+    matrix result(*this);
+    result += a;
+    return result;
+}
+
+matrix matrix::operator-(int a) const
+{
+    matrix result(*this);
+    result -= a;
+    return result;
+}
+
+matrix matrix::operator*(int a) const
+{
+    matrix result(*this);
+    result *= a;
+    return result;
+}
+
+matrix operator+(int a, const matrix& m)
+{
+    return m + a;
+}
+
+matrix operator*(int a, const matrix& m)
+{
+    return m * a;
+}
+
+matrix operator-(int a, const matrix& m)
+{
+    matrix result(m);
+
+    for (int i = 0; i < result.n * result.n; ++i) {
+        result.data[i] = a - result.data[i];
+    }
+
+    return result;
+}
+
+matrix& matrix::operator++(int)
+{
+    for (int i = 0; i < n * n; ++i) {
+        data[i] += 1;
+    }
+    return *this;
+}
+
+matrix& matrix::operator--(int)
+{
+    for (int i = 0; i < n * n; ++i) {
+        data[i] -= 1;
+    }
+    return *this;
+}
+
+matrix& matrix::operator+=(int a)
+{
+    for (int i = 0; i < n * n; ++i) {
+        data[i] += a;
+    }
+    return *this;
+}
+
+matrix& matrix::operator-=(int a)
+{
+    for (int i = 0; i < n * n; ++i) {
+        data[i] -= a;
+    }
+    return *this;
+}
+
+matrix& matrix::operator*=(int a)
+{
+    for (int i = 0; i < n * n; ++i) {
+        data[i] *= a;
+    }
+    return *this;
+}
+
+matrix& matrix::operator()(double value)
+{
+    int add = static_cast<int>(std::floor(value));
+
+    for (int i = 0; i < n * n; ++i) {
+        data[i] += add;
     }
     return *this;
 }
@@ -307,46 +373,4 @@ bool matrix::operator<(const matrix& m)
             return false;
     }
     return true;
-matrix& matrix::pod_przekatna(void) {
-    for (int i = 0; i < n * n; i++)
-    {
-        data[i] = 0;
-    }
-    for (int i = 1; i < n; i++)
-    {
-        for (int j = 0; j < i; j++)
-        {
-            data[i * n + j] = 1;
-        }
-    }
-    return *this;
-}
-
-matrix& matrix::nad_przekatna(void) {
-    for (int i = 0; i < n * n; i++)
-    {
-        data[i] = 0;
-    }
-    for (int i = 0; i < n - 1; i++)
-    {
-        for (int j = i + 1; j < n; j++)
-        {
-            data[i * n + j] = 1;
-        }
-    }
-    return *this;
-}
-
-matrix& matrix::szachownica(void) {
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            if ((i + j) % 2 == 0)
-                data[i * n + j] = 0;
-            else
-                data[i * n + j] = 1;
-        }
-    }
-    return *this;
 }
